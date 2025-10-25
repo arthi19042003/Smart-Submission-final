@@ -1,0 +1,132 @@
+.profile-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.profile-container h1 {
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.profile-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 20px;
+  border-bottom: 2px solid #9b59b6;
+  padding-bottom: 5px;
+}
+
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.skills-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.skills-input input {
+  flex: 1;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-tag {
+  background-color: #9b59b6;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.skill-tag:hover {
+  background-color: #8e44ad;
+}
+
+
+.skill-remove {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.skill-remove:hover {
+  opacity: 0.8;
+}
+
+.profile-container .btn-primary {
+  margin-top: 20px;
+}
+
+/* Responsive Profile */
+@media (max-width: 768px) {
+  .profile-container {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .profile-container h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .profile-container h2 {
+    font-size: 18px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .skills-input {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .skills-input button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 10px;
+  }
+
+  .profile-container h1 {
+    font-size: 24px;
+  }
+
+  .profile-container h2 {
+    font-size: 16px;
+  }
+
+  .skill-tag {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+
+  .profile-container .btn-primary {
+    width: 100%;
+    margin-top: 15px;
+  }
+}

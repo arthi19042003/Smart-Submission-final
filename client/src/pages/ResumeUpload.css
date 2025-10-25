@@ -1,0 +1,173 @@
+.resume-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.resume-container h1 {
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.resume-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 20px;
+  border-bottom: 2px solid #9b59b6;
+  padding-bottom: 5px;
+}
+
+.file-info {
+  color: #666;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.no-resumes {
+  text-align: center;
+  color: #666;
+  padding: 40px 20px;
+}
+
+.resumes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.resume-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.resume-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+
+.resume-item.active {
+  border-color: #27ae60;
+  background: #eafaf1;
+}
+
+.resume-info h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.resume-meta {
+  color: #666;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.resume-date {
+  color: #999;
+  font-size: 13px;
+  margin: 5px 0;
+}
+
+.active-badge {
+  display: inline-block;
+  background: #27ae60;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.resume-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.resume-actions button {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+/* Responsive Resume Upload */
+@media (max-width: 768px) {
+  .resume-container {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .resume-container h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .resume-container h2 {
+    font-size: 18px;
+  }
+
+  .resume-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .resume-info h3 {
+    font-size: 16px;
+  }
+
+  .resume-actions {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .resume-actions button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .resume-container {
+    padding: 10px;
+  }
+
+  .resume-container h1 {
+    font-size: 24px;
+  }
+
+  .resume-container h2 {
+    font-size: 16px;
+  }
+
+  .resume-item {
+    padding: 12px;
+  }
+
+  .resume-info h3 {
+    font-size: 15px;
+  }
+
+  .resume-meta {
+    font-size: 13px;
+  }
+
+  .resume-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .resume-actions button {
+    width: 100%;
+  }
+
+  .no-resumes {
+    padding: 30px 15px;
+  }
+}
