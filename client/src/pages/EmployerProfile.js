@@ -9,15 +9,14 @@ const EmployerProfile = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  // Define mandatory fields for the profile form - ADJUST AS NEEDED
-  // ADDED the new fields here
+  // Define mandatory fields for the profile form
   const mandatoryProfileFields = [
       'companyName',
       'hiringManagerFirstName',
       'hiringManagerLastName',
-      'hiringManagerPhone', // Added
-      'companyWebsite',     // Added
-      'companyPhone',       // Added
+      'hiringManagerPhone',
+      'companyWebsite',
+      'companyPhone',
       'companyAddress',
       'companyLocation',
       'organization',
@@ -45,6 +44,11 @@ const EmployerProfile = () => {
 
   const [projects, setProjects] = useState([]);
   const [sponsorInput, setSponsorInput] = useState('');
+  
+  // --- ADD THIS STATE ---
+  // This state will track which project cards are "open" or "collapsed"
+  const [openProjects, setOpenProjects] = useState({});
+  // --- END ADD ---
 
   // Effect to load data when user object is available/changes
   useEffect(() => {
@@ -69,6 +73,18 @@ const EmployerProfile = () => {
             preferredCommunicationMode: user.preferredCommunicationMode || 'Email'
         });
         setProjects(user.projects || []);
+
+        // --- ADD THIS BLOCK ---
+        // By default, set all loaded projects to be "open" (expanded)
+        const initialOpenState = {};
+        if (user.projects) {
+          user.projects.forEach((_, index) => {
+            initialOpenState[index] = true;
+          });
+        }
+        setOpenProjects(initialOpenState);
+        // --- END ADD BLOCK ---
+
     } else {
         console.log("useEffect: No user or user is not an employer.", user);
     }
@@ -102,9 +118,28 @@ const EmployerProfile = () => {
     });
   };
 
+  // --- ADD THIS FUNCTION ---
+  // Toggles the visibility of a project's team members
+  const toggleProject = (index) => {
+    setOpenProjects(prev => ({
+      ...prev,
+      [index]: !prev[index] // Toggle the boolean state for this project
+    }));
+  };
+  // --- END ADD FUNCTION ---
+
   // Project Add/Remove/Change handlers
   const handleAddProject = () => {
+    const newProjectIndex = projects.length;
     setProjects([...projects, { projectName: '', teamSize: 0, teamMembers: [] }]);
+    
+    // --- ADD THIS BLOCK ---
+    // Automatically expand the new project when it's added
+    setOpenProjects(prev => ({
+      ...prev,
+      [newProjectIndex]: true
+    }));
+    // --- END ADD BLOCK ---
   };
 
   const handleProjectChange = (index, field, value) => {
@@ -114,6 +149,15 @@ const EmployerProfile = () => {
 
   const handleRemoveProject = (index) => {
     setProjects(projects.filter((_, i) => i !== index));
+    
+    // --- ADD THIS BLOCK ---
+    // Clean up the state when a project is removed
+    setOpenProjects(prev => {
+      const newState = { ...prev };
+      delete newState[index];
+      return newState;
+    });
+    // --- END ADD BLOCK ---
   };
 
   // Team Member Add/Remove/Change handlers
@@ -238,7 +282,6 @@ const EmployerProfile = () => {
                  </div>
               </div>
                <div className="form-group">
-                  {/* --- ADDED STAR and required --- */}
                   <label>Hiring Manager Phone<span className="mandatory-star">*</span></label>
                   <input type="tel" name="hiringManagerPhone" value={formData.hiringManagerPhone} onChange={handleChange} placeholder="Phone" required />
                </div>
@@ -259,12 +302,10 @@ const EmployerProfile = () => {
 
             <div className="form-row">
               <div className="form-group">
-                {/* --- ADDED STAR and required --- */}
                 <label>Company Website<span className="mandatory-star">*</span></label>
                 <input type="url" name="companyWebsite" value={formData.companyWebsite} onChange={handleChange} placeholder="https://www.company.com" required />
               </div>
               <div className="form-group">
-                {/* --- ADDED STAR and required --- */}
                 <label>Company Phone<span className="mandatory-star">*</span></label>
                 <input type="tel" name="companyPhone" value={formData.companyPhone} onChange={handleChange} placeholder="(123) 456-7890" required />
               </div>
@@ -338,13 +379,42 @@ const EmployerProfile = () => {
           <div className="card">
             <h2>Projects</h2>
             <p className="field-hint">Manage your projects and team members</p>
+            
+            {/* --- BUTTON MOVED HERE --- */}
+            <button 
+              type="button" 
+              onClick={handleAddProject} 
+              className="btn btn-secondary"
+              style={{ marginBottom: '1.5rem' }} 
+            >
+              + Add Project
+            </button>
+            {/* --- END OF MOVE --- */}
+
             <div className="projects-list">
               {projects.map((project, projectIndex) => (
                 <div key={projectIndex} className="project-card">
+                  
+                  {/* --- UPDATED PROJECT HEADER --- */}
                   <div className="project-header">
-                    <h3>Project {projectIndex + 1}</h3>
-                    <button type="button" onClick={() => handleRemoveProject(projectIndex)} className="btn btn-danger btn-sm">Remove Project</button>
+                    <h3>
+                      Project {projectIndex + 1}
+                      {project.projectName && `: ${project.projectName}`}
+                    </h3>
+                    <div>
+                      <button 
+                        type="button" 
+                        onClick={() => toggleProject(projectIndex)} 
+                        className="btn btn-outline btn-sm"
+                        style={{ marginRight: '10px' }}
+                      >
+                        {openProjects[projectIndex] ? 'Collapse' : 'Expand'}
+                      </button>
+                      <button type="button" onClick={() => handleRemoveProject(projectIndex)} className="btn btn-danger btn-sm">Remove Project</button>
+                    </div>
                   </div>
+                  {/* --- END UPDATED HEADER --- */}
+
                   <div className="form-row">
                     <div className="form-group">
                       <label>Project Name</label>
@@ -355,46 +425,52 @@ const EmployerProfile = () => {
                       <input type="number" value={project.teamSize} onChange={(e) => handleProjectChange(projectIndex, 'teamSize', e.target.value)} placeholder="0" min="0" />
                     </div>
                   </div>
-                  <div className="team-members-section">
-                    <h4>Team Members</h4>
-                    {(project.teamMembers || []).map((member, memberIndex) => (
-                      <div key={memberIndex} className="team-member-card">
-                        <div className="team-member-header">
-                          <span>Member {memberIndex + 1}</span>
-                          <button type="button" onClick={() => handleRemoveTeamMember(projectIndex, memberIndex)} className="btn btn-danger btn-xs">Remove</button>
+                  
+                  {/* --- WRAP TEAM MEMBERS SECTION IN CONDITIONAL RENDER --- */}
+                  {openProjects[projectIndex] && (
+                    <div className="team-members-section">
+                      <h4>Team Members</h4>
+                      {(project.teamMembers || []).map((member, memberIndex) => (
+                        <div key={memberIndex} className="team-member-card">
+                          <div className="team-member-header">
+                            <span>Member {memberIndex + 1}</span>
+                            <button type="button" onClick={() => handleRemoveTeamMember(projectIndex, memberIndex)} className="btn btn-danger btn-xs">Remove</button>
+                          </div>
+                          <div className="form-row">
+                             <div className="form-group">
+                               <label>First Name</label>
+                               <input type="text" value={member.firstName} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'firstName', e.target.value)} placeholder="First name" />
+                             </div>
+                             <div className="form-group">
+                               <label>Last Name</label>
+                               <input type="text" value={member.lastName} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'lastName', e.target.value)} placeholder="Last name" />
+                             </div>
+                           </div>
+                           <div className="form-row">
+                             <div className="form-group">
+                               <label>Email</label>
+                               <input type="email" value={member.email} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'email', e.target.value)} placeholder="email@company.com" />
+                             </div>
+                             <div className="form-group">
+                               <label>Phone</label>
+                               <input type="tel" value={member.phone} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'phone', e.target.value)} placeholder="(123) 456-7890" />
+                             </div>
+                           </div>
+                           <div className="form-group">
+                              <label>Role</label>
+                             <input type="text" value={member.role} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'role', e.target.value)} placeholder="e.g., Project Manager, Developer" />
+                           </div>
                         </div>
-                        <div className="form-row">
-                           <div className="form-group">
-                             <label>First Name</label>
-                             <input type="text" value={member.firstName} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'firstName', e.target.value)} placeholder="First name" />
-                           </div>
-                           <div className="form-group">
-                             <label>Last Name</label>
-                             <input type="text" value={member.lastName} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'lastName', e.target.value)} placeholder="Last name" />
-                           </div>
-                         </div>
-                         <div className="form-row">
-                           <div className="form-group">
-                             <label>Email</label>
-                             <input type="email" value={member.email} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'email', e.target.value)} placeholder="email@company.com" />
-                           </div>
-                           <div className="form-group">
-                             <label>Phone</label>
-                             <input type="tel" value={member.phone} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'phone', e.target.value)} placeholder="(123) 456-7890" />
-                           </div>
-                         </div>
-                         <div className="form-group">
-                            <label>Role</label>
-                           <input type="text" value={member.role} onChange={(e) => handleTeamMemberChange(projectIndex, memberIndex, 'role', e.target.value)} placeholder="e.g., Project Manager, Developer" />
-                         </div>
-                      </div>
-                    ))}
-                    <button type="button" onClick={() => handleAddTeamMember(projectIndex)} className="btn btn-outline btn-sm">+ Add Team Member</button>
-                  </div>
+                      ))}
+                      <button type="button" onClick={() => handleAddTeamMember(projectIndex)} className="btn btn-outline btn-sm">+ Add Team Member</button>
+                    </div>
+                  )}
+                  {/* --- END WRAP --- */}
+
                 </div>
               ))}
             </div>
-            <button type="button" onClick={handleAddProject} className="btn btn-secondary">+ Add Project</button>
+            {/* Button was removed from here */}
           </div>
 
           {/* Messages */}

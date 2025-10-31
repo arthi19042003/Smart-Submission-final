@@ -1,20 +1,3 @@
-/* client/src/index.css */
-
-/* --- ADD THIS ANIMATION AT THE TOP --- */
-@keyframes animated-gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-/* --- END OF ANIMATION --- */
-
-
 * {
   margin: 0;
   padding: 0;
@@ -27,11 +10,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
-  /* --- MODIFIED BACKGROUND --- */
-  background: linear-gradient(to right, #e0c3fc, #8ec5fc, #e0c3fc); /* Added third color for a smoother loop */
-  background-size: 200% 200%; /* Make background larger so it can move */
-  animation: animated-gradient 10s ease infinite; /* Apply the animation */
+
+  /* --- UPDATED BACKGROUND --- */
+  background-color: #ffffff; /* Pure white background */
   /* --- END MODIFICATION --- */
 
   color: #333;
@@ -69,32 +50,41 @@ code {
   box-shadow: none;
 }
 
+/* --- UPDATED BUTTON COLORS (FORCE OVERRIDE) --- */
 
-.btn-primary {
-  background-color: #9b59b6;
-  color: white;
+.btn-primary,
+button,
+input[type="submit"],
+input[type="button"] {
+  background-color: #652AAB !important; /* Purple */
+  color: #fff !important;
+  border: none !important;
 }
 
-.btn-primary:hover {
-  background-color: #8e44ad;
+.btn-primary:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  background-color: #531f90 !important; /* Slightly darker hover */
+  color: #fff !important;
 }
 
 .btn-secondary {
-  background-color: #7f8c8d;
-  color: white;
+  background-color: #9b59b6 !important;
+  color: white !important;
 }
 
 .btn-secondary:hover {
-  background-color: #6c7a7b;
+  background-color: #8747a4 !important;
 }
 
 .btn-danger {
-  background-color: #e74c3c;
-  color: white;
+  background-color: #e74c3c !important;
+  color: white !important;
 }
 
 .btn-danger:hover {
-  background-color: #c0392b;
+  background-color: #c0392b !important;
 }
 
 .form-group {
@@ -123,10 +113,9 @@ code {
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #9b59b6;
-  box-shadow: 0 0 5px rgba(155, 89, 182, 0.3);
+  border-color: #652AAB;
+  box-shadow: 0 0 5px rgba(101, 42, 171, 0.3);
 }
-
 
 .form-group textarea {
   min-height: 100px;
@@ -145,13 +134,27 @@ code {
   margin-top: 5px;
 }
 
+/* --- CARD STYLE (Purple line removed) --- */
 .card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(3px);
+
+  /* Remove any purple border or pseudo-element */
+  border-top: none !important;
+  position: relative;
+}
+
+.card::before {
+  content: none !important;
+}
+
+/* Optional: Reduce top margin between heading and cards */
+.dashboard-cards {
+  margin-top: 10px !important;
 }
 
 .loading {
@@ -179,7 +182,7 @@ code {
   .form-group input,
   .form-group textarea,
   .form-group select {
-    font-size: 16px; /* Prevents zoom on mobile */
+    font-size: 16px;
   }
 }
 

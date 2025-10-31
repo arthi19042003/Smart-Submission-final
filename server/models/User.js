@@ -36,27 +36,7 @@ const UserSchema = new mongoose.Schema({
     experience: [{ /* ... existing structure ... */ }],
     education: [{ /* ... existing structure ... */ }]
   },
-  employerProfile: { // Employer Specific Profile
-        // ---- ADD THESE FIELDS ----
-      companyName: { type: String, default: '' },
-      hiringManagerFirstName: { type: String, default: '' },
-      hiringManagerLastName: { type: String, default: '' },
-      hiringManagerPhone: { type: String, default: '' },
-        // ---- END ADD ----
-    address: { type: String },
-    companyWebsite: { type: String },
-    companyPhone: { type: String },
-    companyAddress: { type: String },
-    companyLocation: { type: String },
-    organization: { type: String },
-    costCenter: { type: String },
-    department: { type: String },
-    projectSponsors: [{ type: String }],
-    preferredCommunicationMode: { type: String, default: 'Email' },
-    projects: [
-      { /* ... existing structure ... */ },
-    ],
-  },
+  // The redundant employerProfile object has been removed.
   createdAt: {
     type: Date,
     default: Date.now

@@ -35,8 +35,7 @@ const Navbar = () => {
                   <Link to="/dashboard" className="navbar-link">Dashboard</Link>
                   <Link to="/profile" className="navbar-link">Profile</Link>
                   <Link to="/resume" className="navbar-link">Resume</Link>
-                  {/* Add Interviews link when page exists */}
-                  <Link to="/interviews" className="navbar-link">Interviews</Link>
+                
                 </>
               ) : user.userType === 'employer' ? (
                 // --- Employer Links ---
